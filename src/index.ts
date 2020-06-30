@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { promises as fs, createWriteStream, stat, createReadStream } from 'fs';
 import { Readable, pipeline } from 'stream';
 import { createGzip, createGunzip } from 'zlib';
@@ -54,7 +56,7 @@ export class Package {
 		const buffers: Buffer[] = [];
 		let length = 0;
 		for await (const buffer of readable) {
-			buffer.push(buffer);
+			buffers.push(buffer);
 			length += buffer.length;
 		}
 		return Buffer.concat(buffers, length);
@@ -77,12 +79,12 @@ export class Package {
 		await this.#handle.close();
 		this.#handle = (null as any) as fs.FileHandle;
 	}
-	static async open(filename: string) {
+	static async open(filename: string, readonly: boolean = false) {
 		if (await fileExists(filename)) {
-			const fd: fs.FileHandle = await fs.open(filename, 'r+');
+			const fd: fs.FileHandle = await fs.open(filename, readonly ? 'r' : 'r+');
 			const { index, start } = await readIndex(fd);
 			return new Package(fd, index, start);
-		} else {
+		} else if (!readonly) {
 			return await Package.create(filename);
 		}
 	}

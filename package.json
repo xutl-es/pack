@@ -2,7 +2,7 @@
 	"name": "@xutl/pack",
 	"version": "0.0.2",
 	"description": "Random Access Packages",
-	"main": "index.js",
+	"main": "src/index.js",
 	"scripts": {
 		"test": "echo OK",
 		"build": "tsc && chmod 0755 src/index.js",
