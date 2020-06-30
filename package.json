@@ -1,0 +1,33 @@
+{
+	"name": "@xutl/pack",
+	"version": "0.0.1",
+	"description": "Random Access Packages",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo OK",
+		"build": "tsc && chmod 0755 src/index.js",
+		"prepublishOnly": "npm run build"
+	},
+	"bin": {
+		"xutlpack": "./src/index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/xutl-es/pack.git"
+	},
+	"keywords": [
+		"XtremelyUsefulToolLibraries",
+		"Package"
+	],
+	"author": "XUTL <dev@xutl.es>",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/xutl-es/pack/issues"
+	},
+	"homepage": "https://xutl.es",
+	"devDependencies": {
+		"@types/node": "^14.0.14",
+		"typescript": "^3.9.5"
+	},
+	"dependencies": {}
+}
