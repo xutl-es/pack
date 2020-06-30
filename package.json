@@ -1,6 +1,6 @@
 {
 	"name": "@xutl/pack",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "Random Access Packages",
 	"main": "src/index.js",
 	"scripts": {
