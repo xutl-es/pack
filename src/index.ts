@@ -87,6 +87,7 @@ export class Package {
 		} else if (!readonly) {
 			return await Package.create(filename);
 		}
+		throw new Error(`could not open ${filename}`);
 	}
 	static async create(filename: string, name: string = path.basename(filename, path.extname(filename))) {
 		const fd = await fs.open(filename, 'w+');
