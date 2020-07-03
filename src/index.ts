@@ -113,3 +113,6 @@ async function fileExists(filename: string) {
 		return false;
 	}
 }
+
+const Default = Object.freeze({ Package });
+export default Default;
