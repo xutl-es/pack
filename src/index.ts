@@ -60,7 +60,7 @@ export class Package {
 	async string(name: string): Promise<string> {
 		return (await this.content(name)).toString('utf-8');
 	}
-	async json(name: string): Promise<string> {
+	async json(name: string): Promise<any> {
 		return JSON.parse((await this.content(name)).toString('utf-8'));
 	}
 	async close() {
