@@ -17,7 +17,7 @@ export class Reader implements AsyncIterable<[string, Buffer]> {
 		return this.#index.then((index) => Object.keys(index.entries));
 	}
 	async buffer(name: string): Promise<Buffer> {
-		name = new URL(name, `pkg://${(await this.#index).name}/`).pathname.slice(1);
+		name = new URL(name, `pkg://${(await this.#index).name}/`).toString();
 		const index = await this.#index;
 		if (!(name in index.entries)) throw new Error(`not found: ${name}`);
 		const { start, length } = index.entries[name];
