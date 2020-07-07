@@ -21,10 +21,14 @@ export class Reader implements AsyncIterable<[string, Buffer]> {
 		const index = await this.#index;
 		if (!(name in index.entries)) throw new Error(`not found: ${name}`);
 		const { start, length } = index.entries[name];
-		const fd = await fs.open(this.#filename, 'r');
 		const result = Buffer.alloc(length);
-		const { bytesRead } = await fd.read(result, 0, length, start);
-		if (bytesRead !== length) throw new Error(`only read ${bytesRead} bytes rather than ${length}`);
+		const fd = await fs.open(this.#filename, 'r');
+		try {
+			const { bytesRead } = await fd.read(result, 0, length, start);
+			if (bytesRead !== length) throw new Error(`only read ${bytesRead} bytes rather than ${length}`);
+		} finally {
+			await fd.close();
+		}
 		return unzip(result);
 	}
 	async string(name: string) {
