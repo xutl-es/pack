@@ -3,15 +3,18 @@ import { gunzip } from 'zlib';
 import { PkgIndex } from './info';
 import { readIndex } from './package';
 
-export class Reader implements AsyncIterable<Buffer> {
+export class Reader implements AsyncIterable<[string, Buffer]> {
 	readonly #filename: string;
 	readonly #index: Promise<PkgIndex>;
 	constructor(filename: string) {
 		this.#filename = filename;
 		this.#index = getIndex(filename);
 	}
+	get name() {
+		return this.#index.then((index) => index.name);
+	}
 	get entries() {
-		return this.#index.then((index) => Object.keys(index));
+		return this.#index.then((index) => Object.keys(index.entries));
 	}
 	async buffer(name: string): Promise<Buffer> {
 		name = new URL(name, `pkg://${(await this.#index).name}/`).pathname;
@@ -35,12 +38,12 @@ export class Reader implements AsyncIterable<Buffer> {
 	[Symbol.asyncIterator]() {
 		let items: string[];
 		return {
-			next: async (): Promise<IteratorResult<Buffer>> => {
+			next: async (): Promise<IteratorResult<[string, Buffer]>> => {
 				items = items || (await this.entries);
 				const item = items.shift();
 				if (!item) return { done: true, value: null };
-				const value = await this.buffer(item);
-				return { done: false, value };
+				const buffer = await this.buffer(item);
+				return { done: false, value: [item, buffer] };
 			},
 		};
 	}
